@@ -5,8 +5,13 @@ Authors@R:
     person("Daniel", "Kaplan", , "dtkaplan@gmail.com", role = c("aut", "cre"))
 Description: Supports writing interactive assignments in Quarto
 License: MIT + file LICENSE
+Imports: knitr, yaml, jsonlite, commonmark
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://github.com/dtkaplan/devoirs2
 BugReports: https://github.com/dtkaplan/devoirs2/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,154 @@
+---
+title: "Getting started with `{devoirs}`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with `{devoirs}`}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r include=FALSE}
+library(devoirs2)
+```
+
+`r devoirs_init()`
+
+
+* You need to escape backslashes in the YAML, like `$\\sqrt{10}$`.
+
+An example of `devoirs_mc_dropdown()`: `r devoirs_mc_dropdown(label="Spring", choices = c("April", "May", "June"), correct = "May", devoirs_feedback = FALSE)`
+
+
+### Question 1
+
+A triangle that features three distinct interior sides of completely unequal linear lengths 
+is classified in geometric topology as a/an `r devoirs_mc_dropdown(label="triangle_type", choices=c("equilateral", "isosceles", "scalene"), correct="scalene", points=3)` triangle structure.
+
+Which of these numbers is even: `r devoirs_mc_dropdown(label="even_num", choices=c(1:5), correct=2, points=3)`
+
+
+### Question 1
+
+Given the curve formula definition $f(x) = x^2$, the area bounded beneath the curve 
+over the strict linear boundary interval $[0, 2]$ evaluates approximately to the numerical 
+value `r devoirs_num(label="integral_area", true_answer=2.667, interval=0.01, placeholder="0.000", width=6, devoirs_feedback=FALSE, points=3)`.
+
+
+
+In classical mechanics, velocity ($v$) is formally modeled as the first mathematical 
+derivative of position with respect to time, which we denote as the differential formula 
+`r devoirs_word(id="velocity_symbol", placeholder="ds/dt", width=6, true_answer="ds/dt", devoirs_feedback=TRUE)`. 
+Conversely, acceleration ($a$) corresponds directly to the `r devoirs_word(id="accel_ordinal", placeholder="1st, 2nd, etc.", width=10, true_answer="second", devoirs_feedback=TRUE)` 
+derivative of position over elapsed time.
+
+
+### Question 1: State the name of the package used for dynamic report generation in R.
+
+```{devoirs_text}
+#| label: answer_package_name
+#| multiline: false
+#| devoirs_width: 15
+Type your single-line answer response here...
+```
+
+### Question 2: Explain in your own words how the knitr engine processes chunk options.
+
+```{devoirs_text}
+#| label: explanation_essay_box
+#| multiline: true
+Enter your detailed multi-line paragraph response text here...
+```
+
+
+
+3. Evaluate my foot:
+
+```{devoirs_mc}
+#| label: testing
+- choices:
+    - id: "a"
+      choice: "Hello to all the ships at sea and on the land."
+      feedback_message: "Are you new here? and does LaTeX work? $x^2$"
+    - id: "b"
+      choice: "When in the course of human events it becomes necessary ...."
+      correct: true
+      feedback_message: "That is more like it: $\\sqrt{x}$"
+    - id: "c"
+      choice: "This is the winter of our discontent"
+      feedback_message: "a la prochiene."
+      correct: true
+```
+
+---
+
+### 1. Identify the derivative expression of $f(x) = x^2$:
+
+```{devoirs_mc}
+#| label: calculus_basics
+#| devoirs_format: html
+#| devoirs_feedback: true
+- choices:
+    - id: "a"
+      choice: "The basic expression is $2x$"
+      feedback_message: "Good job."
+      correct: true
+    - id: "b"
+      choice: "The complete definition matches **$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$**"
+      correct: false
+      feedback_message: "Sorry."
+    - id: "c"
+      choice: "An alternative calculation formula: $\\int x \\,dx$"
+      feedback_message: "Incorrect, this represents an integration operation."
+```
+
+
+Copy of the above.
+
+```{devoirs_mc}
+#| label: calculus_basics2
+#| devoirs_format: html
+#| devoirs_feedback: true
+- choices:
+    - id: "a"
+      choice: "The basic expression is $2x$"
+      feedback_message: "Good job."
+      correct: true
+    - id: "b"
+      choice: "The complete definition matches **$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$**"
+      correct: false
+      feedback_message: "Sorry."
+    - id: "c"
+      choice: "An alternative calculation formula: $\\int x \\,dx$"
+      feedback_message: "Incorrect, this represents an integration operation."
+```
+
+### 2. Select all expressions that evaluate to an even integer when $x = 2$:
+
+```{devoirs_mc}
+#| label: algebra_multi
+#| devoirs_format: markdown
+#| devoirs_feedback: false
+- choices:
+    - id: "a"
+      choice: "The value matches $x^2$"
+      feedback_message: "True enough"
+      correct: true
+    - id: "b"
+      choice: "The value evaluates to $3x + 1$"
+      feedback_message: "Not on your life"
+    - id: "c"
+      choice: "The value yields $5x$"
+      feedback_message: "Sorry!"
+      correct: true
+```
+
+
+
+
