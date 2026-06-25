@@ -7,23 +7,74 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+This is an ordinary Quarto document instrumented with `{devoirs}`. It is intended for instructors or other authors who are creating course materials. If you are reading this in HTML format, there will be interactive elements.
+
+`{devoirs}` is a system for collecting student input and, if desired, providing immediate feedback. A typical use is to provide assignments for students. You can use Quarto in the  ordinary way, compile the quarto source to HTML, then post on a web site as *static* HTML. The "static" means that the document runs entirely in the student browser. 
 
 ```{r include=FALSE}
 library(devoirs2)
 ```
 
-`r devoirs_init()`
+The workflow for a student is simple:
 
+1. Open the document and respond to the question or essay prompts. 
+2. At any time, press the "submit" button. This will copy out the student responses and paste them, in YAML format, into the student's clipboard.
+3. Once on the clipboard, the student can paste the YAML string into whatever "learning management system" the instructor has set up for the purpose. (This can be as simple as a Google Form.)
+
+By default, student's answers are also saved locally in browser storage. This way, each time the student opens the document, his or her previous work will be filled in. (This behavior can be turned off by the author of the quarto/devoirs document.)
+
+The "collect answers" button is created when the `{devoirs}` system is initiated by an R chunk near the start of the Quarto document. Here it is:
+
+```{r echo=FALSE}
+# TO DO, add a no local storage option
+devoirs_init(clear_cache = FALSE)
+# document-wide chunk options
+# can be overridden locally in a chunk
+knitr::opts_chunk$set(
+  devoirs_feedback = TRUE,   # Change to FALSE to suppress feedback
+  devoirs_format = "html"    # Change to "pdf" to use non-interactive markdown 
+)
+```
+
+There are several ways to solicit student input.
+
+1. A multiple-choice format, like this:
+
+```{devoirs_mc}
+#| label: example-1
+- choices:
+    - id: "a"
+      choice: "The items can be as long as you like and can even include LaTeX markup like $\\lim_{x \\rightarrow 0} x^2$."
+      feedback_message: "Nice"
+      correct: true
+    - id: "b"
+      choice: Another choice.
+      correct: false
+      feedback_message: "Sorry -- it is too cold there."
+    - id: "c"
+      choice: "Still another choice."
+      feedback_message: "No chance of that!"
+```
+
+2. A free-text (essay) editor.
+
+```{devoirs_text}
+#| label: example-2
+#| multiline: true
+You can (optionally) provide some placeholder text that will be ignored by the data collection system and will disappear when the student starts to edit the text box.
+```
+
+3. A dropdown style selector, suitable for very short choices, like this one for picking which month the "darling buds" appear. `r devoirs_mc_dropdown(label='Example-3', choices = c("April", "May", "June"), correct = "May")`
+
+4. A free-text entry suitable for a single word or other short text. For instance, which is the first month of the year? `r devoirs_word(id="example-4", placeholder="enter month name", width=6, true_answer="January", devoirs_feedback=TRUE)`.
+
+NEED TO FIX THIS SO THAT THE `devoirs_feedback` argument is more easily specified.
+
+5. A numerical entry whose correct answer can be specified in *value* $\pm$ *precision* format. For example, type $\pi$ to two decimal digits. `r devoirs_num(label="example-5", true_answer=3.14, interval=0.01, placeholder="0.000", width=6, devoirs_feedback=TRUE, points=3)`
 
 * You need to escape backslashes in the YAML, like `$\\sqrt{10}$`.
 
-An example of `devoirs_mc_dropdown()`: `r devoirs_mc_dropdown(label="Spring", choices = c("April", "May", "June"), correct = "May", devoirs_feedback = FALSE)`
+ 
 
 
 ### Question 1
@@ -38,13 +89,13 @@ Which of these numbers is even: `r devoirs_mc_dropdown(label="even_num", choices
 
 Given the curve formula definition $f(x) = x^2$, the area bounded beneath the curve 
 over the strict linear boundary interval $[0, 2]$ evaluates approximately to the numerical 
-value `r devoirs_num(label="integral_area", true_answer=2.667, interval=0.01, placeholder="0.000", width=6, devoirs_feedback=FALSE, points=3)`.
+value .
 
 
 
 In classical mechanics, velocity ($v$) is formally modeled as the first mathematical 
 derivative of position with respect to time, which we denote as the differential formula 
-`r devoirs_word(id="velocity_symbol", placeholder="ds/dt", width=6, true_answer="ds/dt", devoirs_feedback=TRUE)`. 
+ 
 Conversely, acceleration ($a$) corresponds directly to the `r devoirs_word(id="accel_ordinal", placeholder="1st, 2nd, etc.", width=10, true_answer="second", devoirs_feedback=TRUE)` 
 derivative of position over elapsed time.
 
@@ -148,7 +199,4 @@ Copy of the above.
       feedback_message: "Sorry!"
       correct: true
 ```
-
-
-
 

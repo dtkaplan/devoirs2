@@ -1,0 +1,4 @@
+Name: devoirs_mc
+Description: "Creates a template for a devoirs_mc chunk"
+Binding: insert_devoirs_mc
+Interactive: false

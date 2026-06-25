@@ -19,7 +19,7 @@ set_devoirs_state_component <- function(key, value) {
   assign(key, value, envir = devoirs_state)
 }
 
-get_devoirs_state_componentcomponent <- function(key) {
+get_devoirs_state_component <- function(key) {
   if (!exists(key, envir = devoirs_state, inherits = FALSE)) {
     return(NULL) # Return NULL or throw an error if it doesn't exist
   }

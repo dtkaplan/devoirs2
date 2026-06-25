@@ -3,6 +3,7 @@
 #' This should *not* be called directly by the user.
 #'
 #' See zzz.R for where knitr_hooks$set() is actually invoked
+#' @export
 devoirs_knitr_hooks <- function(x) {
   json_mc <- jsonlite::toJSON(devoirs_state$registered_mc, auto_unbox = TRUE)
   json_text <- jsonlite::toJSON(devoirs_state$registered_text, auto_unbox = TRUE)
