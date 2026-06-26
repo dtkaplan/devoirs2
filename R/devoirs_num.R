@@ -2,7 +2,10 @@
 #'
 #' Use this in an inline chunk
 #' @export
-devoirs_num <- function(label, true_answer, interval = 0, devoirs_feedback = TRUE, placeholder = "num...", width = 6, points = 1) {
+devoirs_num <- function(label, true_answer, interval = 0,
+                        devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
+                        placeholder = "num...", width = 6, points = 1) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   current_file <- knitr::current_input()
   if (!is.null(current_file)) devoirs_state$source_file <- current_file
   num_meta <- list(id = label, trueAnswer = true_answer, interval = interval, points = as.numeric(points))

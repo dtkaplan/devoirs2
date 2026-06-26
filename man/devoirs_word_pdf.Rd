@@ -9,7 +9,7 @@ devoirs_word_pdf(
   placeholder = "",
   width = 10,
   true_answer = "",
-  devoirs_feedback = TRUE,
+  devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
   points = 1
 )
 }

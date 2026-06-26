@@ -7,9 +7,9 @@
 devoirs_word(
   id,
   placeholder = "",
-  width = 10,
   true_answer = "",
-  devoirs_feedback = TRUE,
+  width = nchar(true_answer),
+  devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
   points = 1
 )
 }

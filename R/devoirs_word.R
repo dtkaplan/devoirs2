@@ -2,8 +2,12 @@
 #'
 #' Use this as an inline function
 #' @export
-devoirs_word <- function(id, placeholder = "", width = 10,
-                         true_answer = "", devoirs_feedback = TRUE, points = 1) {
+devoirs_word <- function(id, placeholder = "",
+                         true_answer = "",
+                         width = nchar(true_answer),
+                         devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
+                         points = 1) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   current_file <- knitr::current_input()
   if (!is.null(current_file)) devoirs_state$source_file <- current_file
   placeholder_clean <- gsub('"', '&quot;', placeholder, fixed = TRUE)

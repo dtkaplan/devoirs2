@@ -21,7 +21,7 @@ devoirs_mc_engine <- function(options) {
     total_item_correct <- sum(sapply(item$choices, function(x) isTRUE(x$correct) || identical(x$correct, "true")))
     input_type <- if (total_item_correct > 1) "checkbox" else "radio"
     if (fmt == "markdown") {
-      output_buffer <- c(output_buffer, "::: {layout-ncol=2}", "")
+      # output_buffer <- c(output_buffer, "::: {layout-ncol=2}", "")
       for (j in seq_along(item$choices)) {
         choice_node <- item$choices[[j]]
         is_correct <- isTRUE(choice_node$correct) || identical(choice_node$correct, "true")
@@ -33,11 +33,11 @@ devoirs_mc_engine <- function(options) {
           output_buffer <- c(output_buffer, paste0("- ", alpha_prefix, " ", choice_node$choice))
         }
       }
-      output_buffer <- c(output_buffer, "", ":::", "")
+      # output_buffer <- c(output_buffer, "", ":::", "")
     } else {
       output_buffer <- c(output_buffer,
-                         paste0("<div class='devoirs-mc-item' style='margin-bottom:25px; padding:15px; border-left:4px solid #6f42c1; background:#fafafa; border-radius:4px;'>"),
-                         paste0("  <div style='margin-bottom:12px; min-height: 20px;'><div id='", feedback_container_id, "' style='font-size: 0.95em;'></div></div>"),
+                         paste0("<div class='devoirs-mc-item' style='margin-bottom:25px; padding:5px; background:#fafafa;'>"),
+                         paste0("  <div style='margin-bottom:2px; min-height: 1px;'><div id='", feedback_container_id, "' style='font-size: 0.95em;'></div></div>"),
                          paste0("  <form id='form_", item_id, "' data-chunk-label='", chunk_label, "' data-item-id='", item_id, "'>")
       )
       for (j in seq_along(item$choices)) {
@@ -69,7 +69,7 @@ devoirs_mc_engine <- function(options) {
           "                       }); ",
           "                       fb.innerHTML = msgs.join(''); ",
           "                       if (window.MathJax && window.MathJax.typesetPromise) { MathJax.typesetPromise([fb]); } \"> ",
-          "      <div>", html_choice, "</div>",
+                "      <div>", html_choice, "</div>",
           "    </label>"
         ))
       }

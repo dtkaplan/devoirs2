@@ -8,7 +8,7 @@ devoirs_num(
   label,
   true_answer,
   interval = 0,
-  devoirs_feedback = TRUE,
+  devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
   placeholder = "num...",
   width = 6,
   points = 1

@@ -25,6 +25,12 @@ By default, student's answers are also saved locally in browser storage. This wa
 
 The "collect answers" button is created when the `{devoirs}` system is initiated by an R chunk near the start of the Quarto document. Here it is:
 
+
+
+## An example {#sec-five-examples}
+
+This is a document with five question prompts, each with a different format.
+
 ```{r echo=FALSE}
 # TO DO, add a no local storage option
 devoirs_init(clear_cache = FALSE)
@@ -36,167 +42,122 @@ knitr::opts_chunk$set(
 )
 ```
 
-There are several ways to solicit student input.
-
 1. A multiple-choice format, like this:
+
+Which planets do humans live on? (Select all that apply.)
 
 ```{devoirs_mc}
 #| label: example-1
+#| points: 5
 - choices:
     - id: "a"
-      choice: "The items can be as long as you like and can even include LaTeX markup like $\\lim_{x \\rightarrow 0} x^2$."
-      feedback_message: "Nice"
+      choice: "Earth"
+      feedback_message: "Yes, the blue-green ball."
       correct: true
     - id: "b"
-      choice: Another choice.
-      correct: false
-      feedback_message: "Sorry -- it is too cold there."
+      choice: "Venus"
+      feedback_message: "Sorry -- it is too hot there. \\(x^3\\)"
     - id: "c"
-      choice: "Still another choice."
-      feedback_message: "No chance of that!"
+      choice: "Mars"
+      correct: true
+      feedback_message: "At least in the imaginations of some very rich people."
 ```
 
 2. A free-text (essay) editor.
 
 ```{devoirs_text}
 #| label: example-2
-#| multiline: true
-You can (optionally) provide some placeholder text that will be ignored by the data collection system and will disappear when the student starts to edit the text box.
+#| multiline: false
+What`s your opinion?
 ```
 
 3. A dropdown style selector, suitable for very short choices, like this one for picking which month the "darling buds" appear. `r devoirs_mc_dropdown(label='Example-3', choices = c("April", "May", "June"), correct = "May")`
 
-4. A free-text entry suitable for a single word or other short text. For instance, which is the first month of the year? `r devoirs_word(id="example-4", placeholder="enter month name", width=6, true_answer="January", devoirs_feedback=TRUE)`.
+4. A free-text entry suitable for a single word or other short text. For instance, which is the first month of the year? `r devoirs_word(id="example-4", placeholder="month name", width=6, true_answer="January")`.
 
 NEED TO FIX THIS SO THAT THE `devoirs_feedback` argument is more easily specified.
 
 5. A numerical entry whose correct answer can be specified in *value* $\pm$ *precision* format. For example, type $\pi$ to two decimal digits. `r devoirs_num(label="example-5", true_answer=3.14, interval=0.01, placeholder="0.000", width=6, devoirs_feedback=TRUE, points=3)`
 
+## Initializing a `{devoirs}` document
+
+Before any `{devoirs}` items such as in @sec-five-examples can be created, you need some boilerplate: two r chunks:
+
+````{verbatim, lang="r"}
+
+```{r include=FALSE}
+library(devoirs2)
+```
+
+```{r echo=FALSE}
+# TO DO, add a no local storage option
+devoirs_init(clear_cache = FALSE)
+# document-wide chunk options
+knitr::opts_chunk$set(
+  devoirs_feedback = TRUE,   # Change to FALSE to suppress feedback
+  devoirs_format = "html"    # Change to "pdf" to use non-interactive markdown 
+)
+```
+
+````
+
+The `devoirs_init()` call produces the collect-answers button.
+
+## Creating `{devoirs}` items
+
+The first example in the example is created with a `devoirs_mc` knitr chunk:
+
+````{verbatim, lang = "yaml"}
+Which planets do humans live on? (Select all that apply.)
+
+```{devoirs_mc}
+#| label: Example-1
+#| points: 5
+- choices:
+    - id: "a"
+      choice: "Earth"
+      feedback_message: "Yes, the blue-green ball."
+      correct: true
+    - id: "b"
+      choice: "Venus"
+      feedback_message: "Sorry -- it is too hot there."
+    - id: "c"
+      choice: "Mars"
+      correct: true
+      feedback_message: "At least in the imaginations of some very rich people."
+```
+````
+
+## Feedback
+
+The examples above, except the text editing block, are operating with immediate feedback to the user. This can be turned on or off at the author's discretion. The behavior is controlled by the `devoirs_feedback` knitr-option, which you can set like this:
+
+`knitr::opts_chunk$set(devoirs_feedback = TRUE)`
+
+A value of `FALSE` turns off the feedback. You can use the same argument (e.g. `devoirs_feedback = TRUE`) as an argument
+
+
+## Details
+
 * You need to escape backslashes in the YAML, like `$\\sqrt{10}$`.
 
- 
+## Architecture of `{devoirs}` items
 
+Each of the five types of widgets above is a style of user interface that lets the reader specify some information: which of the multiple-choice options is selected, the text of an essay box, a number, a word (or other short string). We'll call this, for each individual widget, the **user input**. The user input to a widget is used for two purposes:
 
-### Question 1
+1. To produce immediate feedback to the user if the feedback is turned on. More about that in @sec-feedback.
 
-A triangle that features three distinct interior sides of completely unequal linear lengths 
-is classified in geometric topology as a/an `r devoirs_mc_dropdown(label="triangle_type", choices=c("equilateral", "isosceles", "scalene"), correct="scalene", points=3)` triangle structure.
+2. As the record to be included in the collection YAML string that the student will upload for instructor review.
 
-Which of these numbers is even: `r devoirs_mc_dropdown(label="even_num", choices=c(1:5), correct=2, points=3)`
+For the instructor to make sense of any widget's user input, that input needs to be identified: Which question is it an answer to.  The identification is in two pieces:
 
+a. The collection YAML string always has a document field giving the name of the source document containing the document.
 
-### Question 1
+b. Each individual widget in the document has a **label** that the author needs to ensure is unique to that document. (You can use the same labels in different documents, but don't duplicate a label in one document.)
 
-Given the curve formula definition $f(x) = x^2$, the area bounded beneath the curve 
-over the strict linear boundary interval $[0, 2]$ evaluates approximately to the numerical 
-value .
+1. If feedback is turned on, the user input causes the display of feedback to show whether the input was correct or not. (For essays, there's no immediate feedback available. Maybe someday.) This might take the form of a message, a check-vs-x icon, color of the widget, and so on.
 
+2. Storing the input for later **collection** and for updating the browser's local state.
 
-
-In classical mechanics, velocity ($v$) is formally modeled as the first mathematical 
-derivative of position with respect to time, which we denote as the differential formula 
- 
-Conversely, acceleration ($a$) corresponds directly to the `r devoirs_word(id="accel_ordinal", placeholder="1st, 2nd, etc.", width=10, true_answer="second", devoirs_feedback=TRUE)` 
-derivative of position over elapsed time.
-
-
-### Question 1: State the name of the package used for dynamic report generation in R.
-
-```{devoirs_text}
-#| label: answer_package_name
-#| multiline: false
-#| devoirs_width: 15
-Type your single-line answer response here...
-```
-
-### Question 2: Explain in your own words how the knitr engine processes chunk options.
-
-```{devoirs_text}
-#| label: explanation_essay_box
-#| multiline: true
-Enter your detailed multi-line paragraph response text here...
-```
-
-
-
-3. Evaluate my foot:
-
-```{devoirs_mc}
-#| label: testing
-- choices:
-    - id: "a"
-      choice: "Hello to all the ships at sea and on the land."
-      feedback_message: "Are you new here? and does LaTeX work? $x^2$"
-    - id: "b"
-      choice: "When in the course of human events it becomes necessary ...."
-      correct: true
-      feedback_message: "That is more like it: $\\sqrt{x}$"
-    - id: "c"
-      choice: "This is the winter of our discontent"
-      feedback_message: "a la prochiene."
-      correct: true
-```
-
----
-
-### 1. Identify the derivative expression of $f(x) = x^2$:
-
-```{devoirs_mc}
-#| label: calculus_basics
-#| devoirs_format: html
-#| devoirs_feedback: true
-- choices:
-    - id: "a"
-      choice: "The basic expression is $2x$"
-      feedback_message: "Good job."
-      correct: true
-    - id: "b"
-      choice: "The complete definition matches **$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$**"
-      correct: false
-      feedback_message: "Sorry."
-    - id: "c"
-      choice: "An alternative calculation formula: $\\int x \\,dx$"
-      feedback_message: "Incorrect, this represents an integration operation."
-```
-
-
-Copy of the above.
-
-```{devoirs_mc}
-#| label: calculus_basics2
-#| devoirs_format: html
-#| devoirs_feedback: true
-- choices:
-    - id: "a"
-      choice: "The basic expression is $2x$"
-      feedback_message: "Good job."
-      correct: true
-    - id: "b"
-      choice: "The complete definition matches **$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}$**"
-      correct: false
-      feedback_message: "Sorry."
-    - id: "c"
-      choice: "An alternative calculation formula: $\\int x \\,dx$"
-      feedback_message: "Incorrect, this represents an integration operation."
-```
-
-### 2. Select all expressions that evaluate to an even integer when $x = 2$:
-
-```{devoirs_mc}
-#| label: algebra_multi
-#| devoirs_format: markdown
-#| devoirs_feedback: false
-- choices:
-    - id: "a"
-      choice: "The value matches $x^2$"
-      feedback_message: "True enough"
-      correct: true
-    - id: "b"
-      choice: "The value evaluates to $3x + 1$"
-      feedback_message: "Not on your life"
-    - id: "c"
-      choice: "The value yields $5x$"
-      feedback_message: "Sorry!"
-      correct: true
-```
+Let's focus for now on the collection. 
 

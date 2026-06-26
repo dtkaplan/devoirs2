@@ -9,7 +9,7 @@ devoirs_mc_dropdown(
   choices,
   correct,
   points = 1,
-  devoirs_feedback = TRUE
+  devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback")
 )
 }
 \description{

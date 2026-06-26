@@ -3,7 +3,9 @@
 #' Use this in an inline chunk.
 #'
 #' @export
-devoirs_mc_dropdown <- function(label, choices, correct, points = 1, devoirs_feedback = TRUE) {
+devoirs_mc_dropdown <- function(label, choices, correct, points = 1,
+                                devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback")) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   current_file <- knitr::current_input()
   if (!is.null(current_file)) devoirs_state$source_file <- current_file
 

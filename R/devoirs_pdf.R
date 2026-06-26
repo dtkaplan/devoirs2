@@ -7,7 +7,10 @@
 #' choose either the `_html` or `_pdf` version as appropriate.
 #'
 #' @export
-devoirs_word_pdf <- function(id, placeholder = "", width = 10, true_answer = "", devoirs_feedback = TRUE, points = 1) {
+devoirs_word_pdf <- function(id, placeholder = "", width = 10, true_answer = "",
+                             devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
+                             points = 1) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   # Generate a clean LaTeX underlining spacer rule to serve as a handwriting blank
   # Roughly mapping em width to a standard LaTeX underline width
   pt_width <- width * 6
@@ -22,7 +25,10 @@ devoirs_word_pdf <- function(id, placeholder = "", width = 10, true_answer = "",
 }
 
 #' @export
-devoirs_num_pdf <- function(label, true_answer, interval = 0, devoirs_feedback = TRUE, placeholder = "num...", width = 6, points = 1) {
+devoirs_num_pdf <- function(label, true_answer, interval = 0,
+                            devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback"),
+                            placeholder = "num...", width = 6, points = 1) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   # Generate a compact numeric LaTeX handwriting underline path spacer
   pt_width <- width * 6
   pdf_blank <- paste0("\\underline{\\hspace{", pt_width, "pt}}")
@@ -41,7 +47,9 @@ devoirs_num_pdf <- function(label, true_answer, interval = 0, devoirs_feedback =
 }
 
 #' @export
-devoirs_set_pdf <- function(label, choices, correct, points = 1, devoirs_feedback = TRUE) {
+devoirs_set_pdf <- function(label, choices, correct, points = 1,
+                            devoirs_feedback = knitr::opts_chunk$get("devoirs_feedback")) {
+  if (is.null(devoirs_feedback)) devoirs_feedback = TRUE
   formatted_choices <- c()
 
   for (choice in choices) {
